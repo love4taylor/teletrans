@@ -61,6 +61,7 @@ def save_config():
 cfg = load_config()
 api_id = cfg['api_id']
 api_hash = cfg['api_hash']
+deeplx_api_key = cfg['deeplx_api_key']
 target_config = cfg['target_config'] if 'target_config' in cfg else {}
 openai_config = cfg['openai'] if 'openai' in cfg else {}
 openai_enable = openai_config['enable'] if 'enable' in openai_config else False
@@ -97,7 +98,7 @@ async def translate_text(text, source_lang, target_langs) -> {}:
 
 # 翻译deeplx API函数
 async def translate_deeplx(text, source_lang, target_lang, session):
-    url = "https://api.deeplx.org/translate"
+    url = "https://api.deeplx.org/%s/translate" % deeplx_api_key
     payload = {
         "text": text,
         "source_lang": source_lang,
