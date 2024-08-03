@@ -68,6 +68,8 @@ openai_enable = openai_config['enable'] if 'enable' in openai_config else False
 openai_api_key = openai_config['api_key'] if 'api_key' in openai_config else ''
 openai_url = openai_config['url'] if 'url' in openai_config else 'https://api.openai.com/v1/chat/completions'
 openai_model = openai_config['model'] if 'model' in openai_config else 'gpt-3.5-turbo'
+openai_prompt = openai_config['prompt'] if 'prompt' in openai_config else 'If my text cannot be translated or contains nonsencial content, just repeat my words precisely. As an American English expert, you\'ll help users express themselves clearly. You\'re not just translating, but rephrasing to maintain clarity. Use plain English and common idioms, and vary sentence lengths for natural flow. Avoid regional expressions. Respond with the translated sentence.'
+openai_temperature = openai_config['temperature'] if 'temperature' in openai_config else 0.5
 
 # 初始化Telegram客户端。
 client = TelegramClient('%s/client' % workspace, api_id, api_hash)
@@ -129,7 +131,7 @@ async def translate_openai(text, source_lang, target_lang, session):
         'messages': [
             {
             'role': 'system',
-            'content':'If my text cannot be translated or contains nonsencial content, just repeat my words precisely. As an American English expert, you\'ll help users express themselves clearly. You\'re not just translating, but rephrasing to maintain clarity. Use plain English and common idioms, and vary sentence lengths for natural flow. Avoid regional expressions. Respond with the translated sentence.'
+            'content': openai_prompt,
             },
             {
             'role': 'user',
@@ -138,7 +140,7 @@ async def translate_openai(text, source_lang, target_lang, session):
         ],
         'stream': False,
         'model': openai_model,
-        'temperature': 0.5,
+        'temperature': openai_temperature,
         'presence_penalty': 0,
         'frequency_penalty': 0,
         'top_p': 1
